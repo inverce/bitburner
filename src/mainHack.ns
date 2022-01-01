@@ -148,6 +148,7 @@ function findTargetServer(ns, serversList, servers, serverExtraData) {
   return weightedServers.map((server) => server.hostname)
 }
 
+/** @param {NS} ns **/
 export async function main(ns) {
   ns.tprint(`[${localeHHMMSS()}] Starting mainHack.ns`)
 
@@ -176,9 +177,9 @@ export async function main(ns) {
 
     const targetServers = findTargetServer(ns, hackableServers, serverMap.servers, serverExtraData)
     const bestTarget = targetServers.shift()
-    const hackTime = ns.getHackTime(bestTarget) * 1000
-    const growTime = ns.getGrowTime(bestTarget) * 1000
-    const weakenTime = ns.getWeakenTime(bestTarget) * 1000
+    const hackTime = ns.getHackTime(bestTarget)
+    const growTime = ns.getGrowTime(bestTarget)
+    const weakenTime = ns.getWeakenTime(bestTarget)
 
     const growDelay = Math.max(0, weakenTime - growTime - 15 * 1000)
     const hackDelay = Math.max(0, growTime + growDelay - hackTime - 15 * 1000)
@@ -205,6 +206,7 @@ export async function main(ns) {
       growCycles += Math.floor(server.ram / 1.75)
     }
     weakenCycles = growCycles
+    ns.tprint(`.............................................................................`)
 
     ns.tprint(
       `[${localeHHMMSS()}] Selected ${bestTarget} for a target. Planning to ${action} the server. Will wake up around ${localeHHMMSS(
@@ -212,10 +214,14 @@ export async function main(ns) {
       )}`
     )
     ns.tprint(
-      `[${localeHHMMSS()}] Stock values: baseSecurity: ${serverMap.servers[bestTarget].baseSecurityLevel}; minSecurity: ${serverMap.servers[bestTarget].minSecurityLevel
-      }; maxMoney: $${numberWithCommas(parseInt(serverMap.servers[bestTarget].maxMoney, 10))}`
+      `[${localeHHMMSS()}] Security: ${Math.floor(securityLevel * 1000) / 1000}/${serverMap.servers[bestTarget].minSecurityLevel}; money: $${numberWithCommas(parseInt(serverMap.servers[bestTarget].maxMoney, 10))}/$${numberWithCommas(parseInt(serverMap.servers[bestTarget].maxMoney, 10))}`
     )
-    ns.tprint(`[${localeHHMMSS()}] Current values: security: ${Math.floor(securityLevel * 1000) / 1000}; money: $${numberWithCommas(parseInt(money, 10))}`)
+
+    // ns.tprint(
+    //   `[${localeHHMMSS()}] Stock values: baseSecurity: ${serverMap.servers[bestTarget].baseSecurityLevel}; minSecurity: ${serverMap.servers[bestTarget].minSecurityLevel
+    //   }; maxMoney: $${numberWithCommas(parseInt(serverMap.servers[bestTarget].maxMoney, 10))}`
+    // )
+    // ns.tprint(`[${localeHHMMSS()}] Current values: security: ${Math.floor(securityLevel * 1000) / 1000}; money: $${numberWithCommas(parseInt(money, 10))}`)
     ns.tprint(
       `[${localeHHMMSS()}] Time to: hack: ${convertMSToHHMMSS(hackTime)}; grow: ${convertMSToHHMMSS(growTime)}; weaken: ${convertMSToHHMMSS(weakenTime)}`
     )
