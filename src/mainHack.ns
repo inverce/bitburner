@@ -214,7 +214,7 @@ export async function main(ns) {
       )}`
     )
     ns.tprint(
-      `[${localeHHMMSS()}] Security: ${Math.floor(securityLevel * 1000) / 1000}/${serverMap.servers[bestTarget].minSecurityLevel}; money: $${numberWithCommas(parseInt(serverMap.servers[bestTarget].maxMoney, 10))}/$${numberWithCommas(parseInt(serverMap.servers[bestTarget].maxMoney, 10))}`
+      `[${localeHHMMSS()}] Security: ${Math.floor(securityLevel * 1000) / 1000}/${serverMap.servers[bestTarget].minSecurityLevel}; money: $${numberWithCommas(parseInt(money, 10))}/$${numberWithCommas(parseInt(serverMap.servers[bestTarget].maxMoney, 10))}`
     )
 
     // ns.tprint(
